@@ -1,7 +1,7 @@
 # Dyslexia_detection
 This project is aimed at developing technology for detecting Dyslexia using Eye Tracking data.
 
-Check [Dyslexia_detection_binning_kmeans](https://github.com/algoasylum/Dyslexia_detection/blob/master/Dyslexia_detection_binning_kmeans%20.ipynb) file for the main code. 
+Check [Dyslexia_detection_binning_kmeans](https://github.com/algoasylum/Dyslexia_detection/blob/master/Dyslexia_detection_binning_kmeans%20.ipynb) file for the main working code. 
 
 Dyslexia is a learning disorder that involves difficulty reading due to problems identifying speech sounds and learning how they relate to letters and words (decoding). Also called reading disability, dyslexia affects areas of the brain that process language.
 
