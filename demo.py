@@ -9,7 +9,20 @@ from scipy.spatial.distance import euclidean as eu
 import math
 from scipy import signal
 
+def new_vals(data):
+    x = [sum(x) for x in zip(data['LX'].to_list(), data['RX'].tolist())]
+    y = [sum(x) for x in zip(data['LY'].to_list(), data['RY'].tolist())]
+    
+    compl = np.array([complex(a,b) for a,b in zip(x, y)])
+    
+    return compl
+
 def create_bins(bins, fft, overlap_per):
+    """
+    Maps a vector any length to a vector of a fixed length (bins) as mentioned. This helps to compare vectors of various lengths. Each entry of the resulting vector is a sum of fixed number of elements of the input vector. Few of these elements are considered common for successive entries into the resulting vector. This is the overlapping factor.
+
+    So the fixed number of elements considered for the each entry = (lenght of input vector/lenght of output vector) + overlap
+    """
     div_size = len(fft)/bins
     bin_size = div_size*(1+(overlap_per/100))
     half_bin = bin_size/2
@@ -22,32 +35,25 @@ def create_bins(bins, fft, overlap_per):
         pos = np.ceil(half_bin + a*(div_size))
         start = 0 if a == 0 else int(np.ceil(pos - half_bin))
         end = -1 if a == (bins-1) else int(np.ceil(pos + half_bin))
-        #print([start, end])
         
         binned = np.append(binned, sum(np.abs(fft[start : end]))) 
         
     return binned
 
-def new_vals(data):
-    x = [sum(x) for x in zip(data['LX'].to_list(), data['RX'].tolist())]
-    y = [sum(x) for x in zip(data['LY'].to_list(), data['RY'].tolist())]
-    
-    compl = np.array([complex(a,b) for a,b in zip(x, y)])
-    
-    return compl
-
 def binning(D_in, bins, bins_per):
+    """
+    Maps all vectors in given dataset (D_in) to vectors of same length (bins). Certain percentage of elements(bins_per) common between successive bins 
+    """
     all_buckets = []
-    for dataset in D_in:
-        for no in range(len(dataset)):
-            d = new_vals(dataset[no])
-            fft = np.fft.fft(d)   
-
-            binned = binning(bins, fft, bins_per)
-            all_buckets.append(binned)
-            buckets = np.asarray(all_buckets)
     
-    return buckets
+    for dataset in D_in:
+        d = new_vals(dataset)
+        fft = np.fft.fft(d)   
+
+        binned = create_bins(bins, fft, bins_per)
+        all_buckets.append(binned)
+    all_buckets = np.asarray(all_buckets)
+    return all_buckets
 
 def stft_run(D_in, n, f):
     C_spec = []
