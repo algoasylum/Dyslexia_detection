@@ -5,6 +5,7 @@ from matplotlib.gridspec import GridSpec
 from matplotlib.pyplot import figure
 
 def corr(buckets, principalComponents):
+#gives correlation of each dimention of the data with the first principal component 
     cor = []
     for dim in buckets.T:
         cor.append(np.corrcoef(dim, principalComponents[0])[1,0])
@@ -12,6 +13,7 @@ def corr(buckets, principalComponents):
     return cor
 
 def apply_wts(wts, binned):
+#multiplies weights for each dimension to each dimension of each entry 
     wtd_bins = []
     for dim in range(len(binned.T)):
         wtd_bins.append(wts[dim]*binned.T[dim])
@@ -20,6 +22,7 @@ def apply_wts(wts, binned):
     return wtd_bins
 
 def distance_from_cluster_center(centers, data):
+#gives the distance of each vector from the cluster center
     distances = []
     for a in range(186):
         distances.append([eu(centers[0], data[a]), eu(centers[1], data[a]), min(eu(centers[0], data[a]), eu(centers[1], data[a]))])
@@ -31,6 +34,7 @@ def distance_from_cluster_center(centers, data):
 
 
 def degree_of_classification(distances, act_label, pred_label):
+# gives the difference between the distances from each cluster center. It does this for the correctly classified and wrongly classified separately 
     dif_corr = []
     dif_wr = []
     for a in range(186):

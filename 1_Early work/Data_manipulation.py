@@ -8,7 +8,8 @@ def conv(data_set):
     data = {'X':x, 'Y':y}
     
     return data 
-    
+
+#appends the 'X' and 'Y' values of the dataset one after the other 
 def original_vector(data_set):
     data = []
     feature_list = ['X', 'Y']
@@ -18,13 +19,14 @@ def original_vector(data_set):
 
     return data
 
-#Padding at the end
 def get_padded(a,ml):
+#Adds padding of certain length, to match 'ml', to the vector passed vector 'a'
     a = np.pad(a, (0,abs(ml - len(a))), 'mean')
     
     return a 
 
 def padding_at_last(data_set):
+# Combines the data vectors (X, Y) one after the other into a single vector. Added 0s or avg of all values towards the end to match the length of the longest vector. 
     data = []
     feature_list = ['X', 'Y']
     data_conv = conv(data_set)
@@ -34,6 +36,7 @@ def padding_at_last(data_set):
     return get_padded(data,3998)
 
 def padding_in_bw(data_set):
+#pads each feature separately and then appends them together.
     data = []
     feature_list = ['X', 'Y']
     data_conv = conv(data_set)
@@ -44,6 +47,7 @@ def padding_in_bw(data_set):
 
 
 def positions(secf, dif, fact):
+#gives 'dif' equallly spaced positions of approx length 'secf' 
     arr = []
     cn = 0
     for a in range(dif-1):
@@ -53,6 +57,7 @@ def positions(secf, dif, fact):
     return arr
 
 def interpolating(data_set):
+#Adds data points at regular intervals by taking the average of the adjacent values to match a set length. 
     feature_list = ['X', 'Y']
     data_conv = conv(data_set)
     
@@ -83,6 +88,7 @@ def interpolating(data_set):
     return combined_data
 
 def exterpolation(data_set):  
+#removes data points at regular intervals to match a set length
     feature_list = ['X', 'Y']
     data_conv = conv(data_set)
     

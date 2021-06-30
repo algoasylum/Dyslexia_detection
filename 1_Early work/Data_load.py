@@ -30,6 +30,7 @@ def get_data():
 
     return C_data, D_data
 
+#Get Control and Dyslexic data as required for the STFT
 def get_stft_data(C_data, D_data): 
     C_new = []
     for data in C_data:
@@ -98,6 +99,7 @@ def get_stft_data(C_data, D_data):
         D_img.append(y_in)
     
     return C_cmx, C_real, C_img, D_cmx, D_real, D_img, C_new, D_new
+    
     
 def normalise_data(C_new,D_new): 
     for i in range(len(C_new)):

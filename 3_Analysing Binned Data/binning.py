@@ -6,6 +6,10 @@ from sklearn import preprocessing
 import Data_load as dl
 
 def binning(bins, fft, overlap_per):
+# maps a vector any lenght to a vector of a fixed length(bins) as needed. This helps to compare vectors of various lengths. Each entry of the resulting vector is a sum of fixed number of elements of the input vector. Few of these elements are considered common for successive entries into the resulting vector. This is the overlapping factor.
+
+# So the fixed number of elements considered for the each entry = (lenght of input vector/lenght of output vector) + overlap
+
     div_size = len(fft)/bins
     bin_size = div_size*(1+(overlap_per/100))
     half_bin = bin_size/2
@@ -24,7 +28,14 @@ def binning(bins, fft, overlap_per):
         
     return binned
 
+
 def kmeans_binning(D_data,C_data, bins, bins_per):
+# does the binning process and then applies kmeans to the binnned vectors. 
+# returns:
+#     1. conf_len: divides the entire data into groups of different lenghted vectors. Gives the confusion matrix based on the predictions for each separate group
+#     2. conf_m: gives confusion matrix based on prediction for the entire dataset 
+#     3. acc: gives accuracy of predictions
+#     4. buckets: gives the binned data
     data_lens = dl.data_lens()
     data_sets = [D_data,C_data]
     all_buckets = []
@@ -32,7 +43,7 @@ def kmeans_binning(D_data,C_data, bins, bins_per):
     
     for dataset in data_sets:
         for no in range(len(dataset)):
-            d = new_vals(dataset[no])
+            d = dl.average_l_r(dataset[no])
             fft = np.fft.fft(d)   
 
             binned = binning(bins, fft, bins_per)
@@ -52,7 +63,14 @@ def kmeans_binning(D_data,C_data, bins, bins_per):
     
     return conf_len, conf_m, acc, buckets
 
+
 def sectional_kmeans(n, buckets):
+#divides each entry into different sections and then takes a kmeans for each section separately. inputs: n and buckets represent number of sections and data set respectively  
+# The funciton gives the following outputs:
+#     1. all_sec_len - gives the length wise confusion matrix for each section.
+#     2. all_sec_mat - gives the confusion matrix for each section.
+#     3. all_sec_acc - accuracy values for each section.
+
     dyx = len(buckets) - 88
     l = len(buckets[0])
     all_sec_mat = []
@@ -79,9 +97,10 @@ def sectional_kmeans(n, buckets):
         
     return all_sec_len, all_sec_mat, all_sec_acc
 
+#gives 
 def new_vals(data):
-    x = [sum(x) for x in zip(data['LX'].to_list(), data['RX'].tolist())]
-    y = [sum(x) for x in zip(data['LY'].to_list(), data['RY'].tolist())]
+    x = [sum(x)/2 for x in zip(data['LX'].to_list(), data['RX'].tolist())]
+    y = [sum(x)/2 for x in zip(data['LY'].to_list(), data['RY'].tolist())]
     
     compl = np.array([complex(a,b) for a,b in zip(x, y)])
     
