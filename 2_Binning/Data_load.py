@@ -11,8 +11,22 @@ from sklearn.cluster import KMeans
 from sklearn.metrics import confusion_matrix,accuracy_score
 from sklearn import preprocessing
 
-#Get Control and Dyslexic data for 'X' and 'Y'
 def get_data():
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#Converts the eye-tracking data of the Dyslexic and Control candidates present in the data folder into lists of datafromes
+#Each data frame represents the data of 1 candidate
+#The entire data is converted into 2 lists:
+# 1. C_data for control candidates 
+# 2. D_data for dyslexic candidates
+#Structure of the dataframes:
+#        LX    LY    RX    RY
+#    0   ..    ..    ..    .. 
+#    1   ..    ..    ..    .. 
+#    2   ..    ..    ..    .. 
+#   ..   ..    ..    ..    .. 
+#    n   ..    ..    ..    .. 
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
     D_path = glob.glob('Data\Dyslexic' + "\*")
     C_path = glob.glob('Data\Control' + "\*")
 
@@ -30,7 +44,7 @@ def get_data():
 
     return C_data, D_data
 
-#Get Control and Dyslexic data as required for the STFT
+#Get Control and Dyslexic data as required for the STFT operations 
 def get_stft_data(C_data, D_data): 
     C_new = []
     for data in C_data:
@@ -120,12 +134,39 @@ def normalise_data(C_new,D_new):
     
     
 def average_l_r(data):
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#Calculates the average values of the left and righty eye readings.
+# INPUT:
+#     data   : dataframe of a single candidate 
+
+#x   : the average of the x coordinates of the left and right eye readings
+#y   : the average of the y coordinates of the left and right eye readings
+
+#OUTPUT:
+#     x_y_data: combines the average of the x and y coordinates into a dictionary of form: 
+#     X: x,
+#     Y: y
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
     x = [sum(x)/2 for x in zip(data['LX'].to_list(), data['RX'].tolist())]
     y = [sum(x)/2 for x in zip(data['LY'].to_list(), data['RY'].tolist())]
+    x_y_data = {'X':x, 'Y':y}
     
-    return x, y
+    return x_y_data 
 
 def data_lens():
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#Returns a representation of lengths of the entries in C_data and D_data combined. 
+#OUTPUT: 
+#     lens: contains the representation of lengths of each entry in C_data and D_data in this order.
+#           value : length represented
+#             0   :        999
+#             1   :        1249
+#             2   :        1499
+#             3   :        1749
+#             5   :        1999
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
     C_data, D_data = get_data()
     lens = []
     for dSet in [C_data, D_data]:
