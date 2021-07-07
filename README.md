@@ -9,7 +9,7 @@ Highlights:
 * PCA: Principal Component Analysis on binned data to reduce the number of dimensions. 
 
 We've divided our entire work into easy follow along Python notebooks which you can follow in the following order:
-1. [Data Gathering and Data Manipulation](https://github.com/algoasylum/Dyslexia_detection/blob/master/Dyslexia_detection_binning_kmeans%20.ipynb)
+1. [Data Gathering and Data Manipulation](https://github.com/algoasylum/Dyslexia_detection/blob/master/1_Early%20work/Data%20Gathering%20and%20Manipulation.ipynb)
 2. [Binning Process](https://github.com/algoasylum/Dyslexia_detection/blob/master/2_Binning/Dyslexia_detection_binning_kmeans%20.ipynb)
 3. [Analysing Binned data](https://github.com/algoasylum/Dyslexia_detection/blob/master/3_Analysing%20Binned%20Data/Analyzing%20Binned%20data.ipynb)
 4. [Dyslexia STFT](https://github.com/algoasylum/Dyslexia_detection/blob/master/4_STFT%20and%20Perceptron/1_Dyslexia_STFT.ipynb)
